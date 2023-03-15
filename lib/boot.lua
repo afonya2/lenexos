@@ -21,40 +21,40 @@ if gpu then
   gpu.fill(1, 1, w, h, " ")
 end
 
-local y = 1
+_G.print_y = 1
 function status(level, msg)
     if gpu then
         if level == "ok" then
             gpu.setForeground(0x15ed23)
-            gpu.set(1,y,"[OK] "..msg)
+            gpu.set(1,print_y,"[OK] "..msg)
             gpu.setForeground(0xFFFFFF)
         end
         if level == "err" then
             gpu.setForeground(0xed1515)
-            gpu.set(1,y,"[ERR] "..msg)
+            gpu.set(1,print_y,"[ERR] "..msg)
             gpu.setForeground(0xFFFFFF)
         end
         if level == "warn" then
             gpu.setForeground(0xeda815)
-            gpu.set(1,y,"[WARN] "..msg)
+            gpu.set(1,print_y,"[WARN] "..msg)
             gpu.setForeground(0xFFFFFF)
         end
-        if y == h then
+        if print_y == h then
             gpu.copy(1, 2, w, h - 1, 0, -1)
             gpu.fill(1, h, w, 1, " ")
         else
-            y = y + 1
+            print_y = y + 1
         end
     end
 end
 
 _G.print = function(data)
-    gpu.set(1,y,data)
-    if y == h then
+    gpu.set(1,print_y,data)
+    if print_y == h then
         gpu.copy(1, 2, w, h - 1, 0, -1)
         gpu.fill(1, h, w, 1, " ")
     else
-        y = y + 1
+        print_y = print_y + 1
     end
 end
 
@@ -111,4 +111,6 @@ end
 
 status("ok", "components inited")
 computer.pushSignal("init")
-while true do end
+local io = require("io")
+
+--dofile("/")
