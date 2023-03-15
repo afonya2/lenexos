@@ -43,7 +43,7 @@ function status(level, msg)
             gpu.copy(1, 2, w, h - 1, 0, -1)
             gpu.fill(1, h, w, 1, " ")
         else
-            print_y = y + 1
+            print_y = print_y + 1
         end
     end
 end
@@ -107,10 +107,15 @@ status("ok", "Bootscripts ran!")
 
 for c, t in component.list() do
     computer.pushSignal("component_added", c, t)
+    if component[t] == nil then
+        component[t] = component.proxy(c)
+    end
 end
+component.filesystem = component.proxy(computer.getBootAddress())
 
 status("ok", "components inited")
 computer.pushSignal("init")
 local io = require("io")
-
+local ina = io.read()
+error(ina)
 --dofile("/")

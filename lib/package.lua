@@ -43,13 +43,28 @@ function pkg.require(file)
                 pkg.loaded[file] = res
                 return table.unpack(res)
             end
+            if pkg.fs.exists("/"..file..".lua") then
+                local res = table.pack(pkg.Rrequire("/"..file..".lua"))
+                pkg.loaded[file] = res
+                return table.unpack(res)
+            end
 
             if pkg.fs.exists(pkg.path..file) then
                 local res = table.pack(pkg.Rrequire(pkg.path..file))
                 pkg.loaded[file] = res
                 return table.unpack(res)
             end
+            if pkg.fs.exists(pkg.path..file..".lua") then
+                local res = table.pack(pkg.Rrequire(pkg.path..file..".lua"))
+                pkg.loaded[file] = res
+                return table.unpack(res)
+            end
 
+            if pkg.fs.exists("/bin/"..file..".lua") then
+                local res = table.pack(pkg.Rrequire("/bin"..file..".lua"))
+                pkg.loaded[file] = res
+                return table.unpack(res)
+            end
             if pkg.fs.exists("/bin/"..file) then
                 local res = table.pack(pkg.Rrequire("/bin"..file))
                 pkg.loaded[file] = res

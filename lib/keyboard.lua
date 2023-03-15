@@ -130,4 +130,16 @@ keyboard.keys.numpadcomma     = 0xB3
 keyboard.keys.numpadenter     = 0x9C
 keyboard.keys.numpadequals    = 0x8D
 
+function keyboard.getKeyById(id)
+    for k,v in pairs(keyboard.keys) do
+        if v == id then
+            return k
+        end
+    end
+end
+
+function keyboard.getIdByKey(key)
+    return keyboard.keys[key]
+end
+
 return keyboard
