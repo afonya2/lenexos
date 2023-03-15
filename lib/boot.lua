@@ -27,14 +27,17 @@ function status(level, msg)
         if level == "ok" then
             gpu.setForeground(0x15ed23)
             gpu.set(1,y,"[OK] "..msg)
+            gpu.setForeground(0xFFFFFF)
         end
         if level == "err" then
             gpu.setForeground(0xed1515)
             gpu.set(1,y,"[ERR] "..msg)
+            gpu.setForeground(0xFFFFFF)
         end
         if level == "warn" then
             gpu.setForeground(0xeda815)
             gpu.set(1,y,"[WARN] "..msg)
+            gpu.setForeground(0xFFFFFF)
         end
         if y == h then
             gpu.copy(1, 2, w, h - 1, 0, -1)
@@ -45,6 +48,16 @@ function status(level, msg)
     end
 end
 
+_G.print = function(data)
+    gpu.set(1,y,data)
+    if y == h then
+        gpu.copy(1, 2, w, h - 1, 0, -1)
+        gpu.fill(1, h, w, 1, " ")
+    else
+        y = y + 1
+    end
+end
+
 status("ok", "Gpu allocated")
 status("ok", "Booting ".._OSVERSION.."...")
 
@@ -52,7 +65,9 @@ local function dofile(file)
     status("ok", "File: "..file)
     local program, reason = raw_loadfile(file)
     if program then
-      local result = table.pack(pcall(program))
+      local result = table.pack(xpcall(program, function(msg)
+        status("err", debug.traceback(msg))
+      end))
       if result[1] then
         return table.unpack(result, 2, result.n)
       else
@@ -67,6 +82,9 @@ local fis = dofile("/lib/fs.lua")
 local fs = fis.getFs(computer.getBootAddress())
 status("ok", "filesystem loaded!")
 
+local pkg = dofile("/lib/package.lua")
+pkg.init(fs)
+_G.require = pkg.require
 status("ok", "package manager inited!")
 
 local function rom_invoke(method, ...)
@@ -93,3 +111,4 @@ end
 
 status("ok", "components inited")
 computer.pushSignal("init")
+while true do end
