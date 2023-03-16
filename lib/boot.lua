@@ -22,7 +22,9 @@ if gpu then
 end
 
 _G.print_y = 1
+_G.print_x = 1
 function status(level, msg)
+    print_X = 1
     if gpu then
         if level == "ok" then
             gpu.setForeground(0x15ed23)
@@ -45,16 +47,20 @@ function status(level, msg)
         else
             print_y = print_y + 1
         end
+        print_x = 1
     end
 end
 
 _G.print = function(data)
-    gpu.set(1,print_y,data)
-    if print_y == h then
-        gpu.copy(1, 2, w, h - 1, 0, -1)
-        gpu.fill(1, h, w, 1, " ")
-    else
-        print_y = print_y + 1
+    if gpu then
+      gpu.set(1,print_y,data)
+      if print_y == h then
+          gpu.copy(1, 2, w, h - 1, 0, -1)
+          gpu.fill(1, h, w, 1, " ")
+      else
+          print_y = print_y + 1
+      end
+      print_x = 1
     end
 end
 
@@ -116,6 +122,7 @@ component.filesystem = component.proxy(computer.getBootAddress())
 status("ok", "components inited")
 computer.pushSignal("init")
 local io = require("io")
+io.write("OI > ")
 local ina = io.read()
 error(ina)
 --dofile("/")

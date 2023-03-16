@@ -3,9 +3,15 @@ local keyboard = require("keyboard")
 local event = require("event")
 local os = require("os")
 
+function io.write(msg)
+    component.gpu.set(print_x,print_y,msg)
+    print_x = print_x + #msg
+end
+
 function io.read(shown, char)
     local typo = ""
     local y = print_y
+    local x = print_x
     local function r()
         local function render()
             local w, h = component.gpu.maxResolution()
@@ -21,7 +27,7 @@ function io.read(shown, char)
                 for i=1,#typo,1 do
                     spaces = spaces.." "
                 end
-                component.gpu.set(1,y,spaces)
+                component.gpu.set(x,y,spaces)
                 if char == "enter" then
                     break
                 else
@@ -35,7 +41,7 @@ function io.read(shown, char)
                         end
                     end
                 end
-                component.gpu.set(1,y,typo)
+                component.gpu.set(x,y,typo)
             end
             --render()
             coroutine.yield()
@@ -43,7 +49,7 @@ function io.read(shown, char)
     end
     local function c()
         while true do
-            local locs = #typo+1
+            local locs = x+#typo
             local d = component.gpu.get(locs,y)
             local ob = component.gpu.getBackground()
             component.gpu.setBackground(0xFFFFFF)
@@ -66,6 +72,8 @@ function io.read(shown, char)
             break
         end
     end
+    print_x = 1
+    print_y = print_y + 1
     
     return typo
 end
