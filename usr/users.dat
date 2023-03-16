@@ -1,0 +1,6 @@
+{
+    ["root"]={
+        isRoot=true,
+        password="asd123"
+    }
+}

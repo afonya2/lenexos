@@ -120,5 +120,20 @@ end
 component.filesystem = component.proxy(computer.getBootAddress())
 
 status("ok", "components inited")
+
+local fih = fs.open("/usr/pc.dat", "r")
+local fid = ""
+repeat
+  local data = fs.read(fih, math.huge)
+  fid = fid .. (data or "")
+until not data
+fs.close(fih)
+
+local ser = require("serialization")
+
+local conf = ser.unserialize(fid)
+_G._PCNAME = conf.pcname
+
+status("ok", "configs loaded")
 computer.pushSignal("init")
 dofile("/bin/bash.lua")
