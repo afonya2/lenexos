@@ -43,7 +43,7 @@ function io.read(hidden, hchar)
                         if char == "space" then
                             typo = typo.." "
                         else
-                            typo = typo..char
+                            typo = typo..keyboard.charOverride(char)
                         end
                     end
                 end
@@ -88,7 +88,13 @@ function io.read(hidden, hchar)
     render()
 
     print_x = 1
-    print_y = print_y + 1
+    local w,h = component.gpu.maxResolution()
+    if print_y == h then
+        component.gpu.copy(1, 2, w, h - 1, 0, -1)
+        component.gpu.fill(1, h, w, 1, " ")
+    else
+        print_y = print_y + 1
+    end
     
     return typo
 end

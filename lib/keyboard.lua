@@ -142,4 +142,17 @@ function keyboard.getIdByKey(key)
     return keyboard.keys[key]
 end
 
+function keyboard.charOverride(char)
+    if char == "numpaddiv" then
+        char = "/"
+    end
+    if char == "numpadmul" then
+        char = "*"
+    end
+    if char == "period" then
+        char = "."
+    end
+    return char
+end
+
 return keyboard
