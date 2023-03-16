@@ -28,17 +28,17 @@ function status(level, msg)
     if gpu then
         if level == "ok" then
             gpu.setForeground(0x15ed23)
-            gpu.set(1,print_y,"[OK] "..msg)
+            gpu.set(1,print_y,"[OK] "..tostring(msg))
             gpu.setForeground(0xFFFFFF)
         end
         if level == "err" then
             gpu.setForeground(0xed1515)
-            gpu.set(1,print_y,"[ERR] "..msg)
+            gpu.set(1,print_y,"[ERR] "..tostring(msg))
             gpu.setForeground(0xFFFFFF)
         end
         if level == "warn" then
             gpu.setForeground(0xeda815)
-            gpu.set(1,print_y,"[WARN] "..msg)
+            gpu.set(1,print_y,"[WARN] "..tostring(msg))
             gpu.setForeground(0xFFFFFF)
         end
         if print_y == h then
@@ -53,7 +53,7 @@ end
 
 _G.print = function(data)
     if gpu then
-      gpu.set(1,print_y,data)
+      gpu.set(1,print_y,tostring(data))
       if print_y == h then
           gpu.copy(1, 2, w, h - 1, 0, -1)
           gpu.fill(1, h, w, 1, " ")

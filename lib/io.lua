@@ -12,18 +12,18 @@ function io.read(hidden, hchar)
     local typo = ""
     local y = print_y
     local x = print_x
-    local function r()
-        local function render()
-            if hidden == true then
-                local strang = ""
-                for i=1,#typo,1 do
-                    strang = strang..hchar
-                end
-                component.gpu.set(x,y,strang)
-            else
-                component.gpu.set(x,y,typo)
+    local function render()
+        if hidden == true then
+            local strang = ""
+            for i=1,#typo,1 do
+                strang = strang..hchar
             end
+            component.gpu.set(x,y,strang)
+        else
+            component.gpu.set(x,y,typo)
         end
+    end
+    local function r()
         while true do
             local e,_,_,charcode = event.pull("key_down",0.1)
             if e ~= nil then
@@ -35,7 +35,6 @@ function io.read(hidden, hchar)
                 end
                 component.gpu.set(x,y,spaces)
                 if char == "enter" then
-                    render()
                     break
                 else
                     if char == "back" then
@@ -79,6 +78,15 @@ function io.read(hidden, hchar)
             break
         end
     end
+
+    local spaces = ""
+    for i=1,#typo,1 do
+        spaces = spaces.." "
+    end
+    spaces = spaces.." "
+    component.gpu.set(x,y,spaces)
+    render()
+
     print_x = 1
     print_y = print_y + 1
     
