@@ -8,7 +8,7 @@ function io.write(msg)
     print_x = print_x + #msg
 end
 
-function io.read(shown, char)
+function io.read(hidden, hchar)
     local typo = ""
     local y = print_y
     local x = print_x
@@ -41,7 +41,15 @@ function io.read(shown, char)
                         end
                     end
                 end
-                component.gpu.set(x,y,typo)
+                if hidden == true then
+                    local strang = ""
+                    for i=1,#typo,1 do
+                        strang = strang..hchar
+                    end
+                    component.gpu.set(x,y,strang)
+                else
+                    component.gpu.set(x,y,typo)
+                end
             end
             --render()
             coroutine.yield()
