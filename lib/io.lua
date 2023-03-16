@@ -14,9 +14,15 @@ function io.read(hidden, hchar)
     local x = print_x
     local function r()
         local function render()
-            local w, h = component.gpu.maxResolution()
-            component.gpu.fill(1, y, w, 1, " ")
-            component.gpu.set(1,y,typo)
+            if hidden == true then
+                local strang = ""
+                for i=1,#typo,1 do
+                    strang = strang..hchar
+                end
+                component.gpu.set(x,y,strang)
+            else
+                component.gpu.set(x,y,typo)
+            end
         end
         while true do
             local e,_,_,charcode = event.pull("key_down",0.1)
@@ -29,6 +35,7 @@ function io.read(hidden, hchar)
                 end
                 component.gpu.set(x,y,spaces)
                 if char == "enter" then
+                    render()
                     break
                 else
                     if char == "back" then
@@ -41,15 +48,7 @@ function io.read(hidden, hchar)
                         end
                     end
                 end
-                if hidden == true then
-                    local strang = ""
-                    for i=1,#typo,1 do
-                        strang = strang..hchar
-                    end
-                    component.gpu.set(x,y,strang)
-                else
-                    component.gpu.set(x,y,typo)
-                end
+                render()
             end
             --render()
             coroutine.yield()
