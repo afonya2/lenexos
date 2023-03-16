@@ -71,13 +71,9 @@ local function dofile(file)
     status("ok", "File: "..file)
     local program, reason = raw_loadfile(file)
     if program then
-      local result = table.pack(xpcall(program, function(msg)
-        status("err", debug.traceback(msg))
-      end))
+      local result = table.pack(pcall(program))
       if result[1] then
         return table.unpack(result, 2, result.n)
-      else
-        error(debug.traceback(result[2]))
       end
     else
       error(reason)

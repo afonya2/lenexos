@@ -24,8 +24,6 @@ function pkg.Rrequire(path)
             end))
             if result[1] then
                 return table.unpack(result, 2, result.n)
-            else
-                error(debug.traceback(result[2]))
             end
         else
             error(reason)
