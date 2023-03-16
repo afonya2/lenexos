@@ -1,5 +1,6 @@
 local io = require("io")
 
+local w, h = component.gpu.maxResolution()
 component.gpu.fill(1, 1, w, h, " ")
 print_x = 1
 print_y = 1
